@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Face Detection</title>
+    <style>
+        body {
+            font-family: "Courier New", Courier, monospace;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            color: #00ff00;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(0, 255, 0, 0.05);
+            padding: 20px;
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        input[type="file"] {
+            color: #00ff00;
+            background-color: #000;
+            border: 1px solid #00ff00;
+            padding: 8px;
+            margin: 10px 0;
+        }
+
+        img {
+            max-width: 500px;
+            margin-top: 20px;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: black;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .signature {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.6rem;
+            white-space: pre;
+            color: #0f0;
+            opacity: 0.8;
+        }
+
+        button:hover {
+            background-color: #003300;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧠 Fake Face Detection</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required onchange="previewImage(event)">
+        <img id="preview" src="#" alt="Vista previa de la imagen" style="display: none;">
+        <button type="submit">Process Image</button>
+    </form>
+
+    {% if face_count is not none %}
+        <h2>✔️ Fake face detected: {{ face_count }}</h2>
+        <!--<img src="{{ url_for('static', filename=result_img) }}" alt="Resultado con rostros detectados">-->
+    {% endif %}
+    
+     <div class="signature">
+            ___   ___    __   ____  ___    ___    __     __    <br>
+           |   | /  |   |  |  |  |  |  |  /  |   |  |   |  |       [0][1][0]  <br>
+           |   |/  /    |  |  |  |  |  | /  /    |  |   |  |       [0][0][1]   <br>
+           |      /     |  |  |  |  |      |     \\  \\_/  /       [1][1][1]<br>
+           |  |\\  \\   |  '--'  |  |  |\\  \\    \\     /        <br>
+           | _| `.__\\  |________|  | _| `.__\\    |____|         
+        </div>
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const reader = new FileReader();
+            reader.onload = function(){
+                const img = document.getElementById('preview');
+                img.src = reader.result;
+                img.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    </script>
+</body>
+</html>
