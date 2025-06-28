@@ -37,12 +37,13 @@ def index():
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
         img_tensor = transform_original(img).unsqueeze(0)
-        current_index = model(img_tensor.to(device))[0].argmax().unsqueeze(0)
-        print("index is", current_index)
-        if current_index == 1:
-            return render_template("index.html", face_count="It's real!", result_img="output.jpg")
-        else:
-            return render_template("index.html", face_count="It's fake!", result_img="output.jpg")
+        with torch.no_grad():
+            current_index = model(img_tensor.to(device))[0].argmax().unsqueeze(0)
+            print("index is", current_index)
+            if current_index == 1:
+                return render_template("index.html", face_count="It's real!", result_img="output.jpg")
+            else:
+                return render_template("index.html", face_count="It's fake!", result_img="output.jpg")
         
 
     return render_template("index.html", face_count=None, result_img="output.jpg")
