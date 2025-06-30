@@ -9,11 +9,39 @@
             margin: 0;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-direction: row;
+            justify-content: space-between;
             align-items: center;
             background-color: #000;
             color: #00ff00;
+        }
+        .sidebar {
+            width: 30%;
+            background-color: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 2px solid #0f0;
+        }
+        .left-panel {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .right-panel .signature {
+            margin-top: auto;
         }
 
         h1, h2 {
@@ -89,18 +117,20 @@
     </style>
 </head>
 <body>
-    <h1>🧠 Fake Face Detection</h1>
-
-    <form method="post" enctype="multipart/form-data">
-        <input type="file" name="image" accept="image/*" required onchange="previewImage(event)">
-        <img id="preview" src="#" alt="Vista previa de la imagen" style="display: none;">
-        <button type="submit">Process Image</button>
-    </form>
-
-    {% if face_count is not none %}
-        <h2>✔️ Fake face detected: {{ face_count }}</h2>
-        <!--<img src="{{ url_for('static', filename=result_img) }}" alt="Resultado con rostros detectados">-->
-    {% endif %}
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; height: 100vh;">
+        <h1>🧠 Fake Face Detection</h1>
+        <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: center;">
+            <input type="file" name="image" accept="image/*" required onchange="previewImage(event)">
+            <img id="preview" src="#" alt="Vista previa de la imagen" style="display: none;">
+            <button type="submit">Process Image</button>
+        </form>
+        {% if face_count is not none %}
+            <h2>✔️ Fake face detected: {{ face_count }}</h2>
+        {% endif %}
+    </div>
+    <div class="sidebar">
+        <img id="mascotGif" src="../static/cow_v1.gif" alt="Mascot" width="320">
+    </div>
      <div class="hacking-phrases" id="hackingPhrases"></div>
      <div class="signature">
             ___   ___    __   ____  ___    ___    __     __    <br>
@@ -163,6 +193,26 @@
         }
         showRandomPhrase();
         setInterval(showRandomPhrase, 5000);
+        const gifFiles = [
+            'cow_v1.gif',
+            'cow_v2.gif'
+            // Add more gif filenames here
+        ];
+        function getRandomGif(current) {
+            let next;
+            do {
+                next = gifFiles[Math.floor(Math.random() * gifFiles.length)];
+            } while (gifFiles.length > 1 && next === current);
+            return next;
+        }
+        function changeGif() {
+            const img = document.getElementById('mascotGif');
+            const current = img.src.split('/').pop();
+            const nextGif = getRandomGif(current);
+            img.src = `../static/${nextGif}`;
+        }
+        // Change gif every 5 seconds
+        setInterval(changeGif, 5000);
     </script>
 </body>
 </html>
